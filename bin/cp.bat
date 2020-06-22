@@ -1,0 +1,1 @@
+copy /Y Debug\MarkLogicODBC.mez "C:\Users\anewberg\Documents\Microsoft Power BI Desktop\Custom Connectors"\
