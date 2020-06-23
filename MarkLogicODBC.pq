@@ -118,9 +118,7 @@ MarkLogicODBCImpl = (server as text, port as number ) =>
             ApplicationIntent = "readonly",
             BoolsAsChar = "Yes",
             Debug = "No",
-            CommLog ="No",
-            Fetch = "2048",
-            UseDeclareFetch="1"
+            CommLog ="No"
         ],
 
         //
