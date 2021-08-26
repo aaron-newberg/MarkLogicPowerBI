@@ -98,14 +98,19 @@ MarkLogicODBCType = type function (
         Documentation.FieldCaption = "Port number",
         Documentation.FieldDescription = "The port that the MarkLogic ODBC Server is running on",
         Documentation.SampleValues = {5432, 7033, 6050}
+    ]),
+    optional database as (type text meta [
+        Documentation.FieldCaption = "Database name",
+        Documentation.FieldDescription = "The name of the MarkLogic database to query against",
+        Documentation.SampleValues = {"data-hub-FINAL", "Documents", "trade-store-db"}
     ]))
     as table meta [
-        Documentation.Name = "MarkLogic ODBC (v3.0.2)",
+        Documentation.Name = "MarkLogic ODBC (v3.0.3)",
         Documentation.LongDescription = "Returns the list of tables returned from the ODBC driver",
         Documentation.Examples = {}
     ];
 
-MarkLogicODBCImpl = (server as text, port as number ) =>
+MarkLogicODBCImpl = (server as text, port as number, optional database as text ) =>
     let
         //
         // Connection string settings
@@ -114,6 +119,7 @@ MarkLogicODBCImpl = (server as text, port as number ) =>
             Driver = Config_DriverName,
             Server = server,
             Port = port,
+            Database = if database = null then "__MarkLogic" else database,
             // set all connection string properties
             ApplicationIntent = "readonly",
             BoolsAsChar = "Yes",
@@ -346,10 +352,11 @@ MarkLogicODBC = [
     TestConnection = (dataSourcePath) => 
         let
             json = Json.Document(dataSourcePath),
-            server = json[server],   // name of function parameter
-            port = json[port]        // name of function parameter
+            server = json[server],    // name of function parameter
+            port = json[port],        // name of function parameter
+            database = json[database] // name of function parameter
         in
-            { "MarkLogicODBC.Contents", server, port },
+            { "MarkLogicODBC.Contents", server, port, database },
     // Set supported types of authentication
     Authentication = [
         UsernamePassword = []
